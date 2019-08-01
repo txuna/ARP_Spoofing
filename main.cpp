@@ -6,18 +6,17 @@ int main(int argc,  char** argv)
   {
     error_handling("Usage Two argument ex)send_arp <interface> <sender ip> <target ip>", false);
   }
+  help();
   Target target;
-  target.wlan_name = argv[1]; //argv[1]
-  /*
   target.wlan_name = argv[1];
-  target.Sender_IP = argv[2];
-  target.Target_IP = argv[3];
-  */
   ip_to_dec(&target, argv[2], argv[3]);
   get_mac(&target);
-  //mac_eth0(&target);
-  //cature_packet(&target);
-  Handler(&target);
+  printf("[DEBUG] : %d.%d.%d.%d and.%d.%d.%d.%dand %02x:%02x:%02x:%02x:%02x:%02x\n",
+  target.Sender_IP[0], target.Sender_IP[1], target.Sender_IP[2], target.Sender_IP[3],
+  target.Target_IP[0], target.Target_IP[1], target.Target_IP[2], target.Target_IP[3],
+  target.MyMac[0], target.MyMac[1], target.MyMac[2], target.MyMac[3], target.MyMac[4], target.MyMac[5]);
+
+  //Handler(&target);
 }
 
 /*

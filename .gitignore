@@ -1,5 +1,6 @@
-*.elf
-*.user
+*.out 
+*.s
 *.o
 *.S
-*.s
+*.out
+arp_sender

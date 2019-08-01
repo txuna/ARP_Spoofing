@@ -23,7 +23,7 @@ typedef struct _Target
 {
   const char* wlan_name;
   u_char Sender_IP[4];
-  u_Char Target_IP[4];
+  u_char Target_IP[4];
   u_char MyMac[6];
   u_char Target_Mac[6];
 }Target;
@@ -87,6 +87,6 @@ void error_handling(const char* msg, bool exist_error);
 int request_arp_packet(Packet* packet, Target* target);
 int reply_arp_packet(Packet* packet, Target* target);
 void make_arp_packet(Packet* packet, Target* target);
-void arp_infection(packet* packet, Target* target);
+void arp_infection(Packet* packet, Target* target);
 int ip_to_dec(Target* target, const char* Sender_IP, const char* Target_IP);
 #endif
