@@ -13,9 +13,12 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <unistd.h>
-
+#include <ifaddrs.h>
+#include <netdb.h>
 
 #define HWADDR_len 6
+#define REQUEST 1
+#define REPLY 2
 //send_arp <interface> <sender ip> <target ip>
 
 #pragma pack(push, 1)
@@ -26,6 +29,7 @@ typedef struct _Target
   u_char Target_IP[4];
   u_char MyMac[6];
   u_char Target_Mac[6];
+  u_char My_IP[4];
 }Target;
 
 typedef struct _Ethernet{
@@ -82,11 +86,12 @@ int cature_packet(Target* target);
 int Handler(Target* target);
 int ARP_Parse(Packet* arp_header, Target* target);
 void help();
+int get_my_ip(Target* target);
 int get_mac(Target* target);
 void error_handling(const char* msg, bool exist_error);
-int request_arp_packet(Packet* packet, Target* target);
-int reply_arp_packet(Packet* packet, Target* target);
-void make_arp_packet(Packet* packet, Target* target);
+int send_arp_packet(Packet* packet, Target* target, int test_mode);
+int receive_arp_packet(Packet* packet, Target* target);
+void make_arp_packet(Packet* packet, Target* target, int arp_mode);
 void arp_infection(Packet* packet, Target* target);
 int ip_to_dec(Target* target, const char* Sender_IP, const char* Target_IP);
 #endif

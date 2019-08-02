@@ -17,7 +17,7 @@ int get_mac(Target* target)
 	mac = (unsigned char *)ifr.ifr_hwaddr.sa_data;
   for(int i=0;i<6;i++)\
   {
-    target->Target_Mac[i] = mac[i];
+    target->MyMac[i] = mac[i];
   }
 
 }
