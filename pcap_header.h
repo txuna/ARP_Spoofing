@@ -81,6 +81,8 @@ typedef struct _Packet
     ARP_Header arp_header;
 }Packet;
 #pragma pack(pop)
+
+/* function */
 int check_arp_packet(const u_char* network_packet);
 int cature_packet(Target* target);
 int Handler(Target* target);

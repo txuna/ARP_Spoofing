@@ -30,7 +30,5 @@ int get_my_ip(Target* target)
             }
         }
     }
-
-
     freeifaddrs(ifaddr);
 }
