@@ -2,14 +2,6 @@
 
 int ARP_Parse(Packet* arp_packet, Target* target)
 {
-  //printf("Dest Mac : ");
-  /*
-  for(int i=0;i<6;i++)
-  {
-    printf(":%02x",arp_packet->arp_header.SourceHardWareAddress[i]);
-    target->Target_Mac[i] = arp_packet->arp_header.SourceHardWareAddress[i];
-  }
-  */
   memcpy(target->Target_Mac, arp_packet->arp_header.SourceHardWareAddress, 6);
   printf("\n");
   return 0;
