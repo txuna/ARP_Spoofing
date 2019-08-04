@@ -17,50 +17,14 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
   if(arp_mode == REQUEST)
   {
     memset(packet->ethernet.dest_mac, 0xff, 6);
-	/*
-	packet->ethernet.dest_mac[0] = 0xff;
-    packet->ethernet.dest_mac[1] = 0xff;
-    packet->ethernet.dest_mac[2] = 0xff;
-    packet->ethernet.dest_mac[3] = 0xff;
-    packet->ethernet.dest_mac[4] = 0xff;
-    packet->ethernet.dest_mac[5] = 0xff;
-	*/
-	/*
-    packet->arp_header.SourceProtocolAddress[0] = target->My_IP[0];
-    packet->arp_header.SourceProtocolAddress[1] = target->My_IP[1];
-    packet->arp_header.SourceProtocolAddress[2] = target->My_IP[2];
-    packet->arp_header.SourceProtocolAddress[3] = target->My_IP[3];
-  	*/
-	memcpy(packet->arp_header.SourceProtocolAddress, target->My_IP, 4); 
+	  memcpy(packet->arp_header.SourceProtocolAddress, target->My_IP, 4);
   }
   else if(arp_mode == REPLY)
   {
-	memcpy(packet->ethernet.dest_mac, target->Target_Mac, 6);
-	/*
-    packet->ethernet.dest_mac[0] = target->Target_Mac[0];
-    packet->ethernet.dest_mac[1] = target->Target_Mac[1];
-    packet->ethernet.dest_mac[2] = target->Target_Mac[2];
-    packet->ethernet.dest_mac[3] = target->Target_Mac[3];
-    packet->ethernet.dest_mac[4] = target->Target_Mac[4];
-    packet->ethernet.dest_mac[5] = target->Target_Mac[5];
-	*/
-	/*
-    packet->arp_header.SourceProtocolAddress[0] = target->Target_IP[0];
-    packet->arp_header.SourceProtocolAddress[1] = target->Target_IP[1];
-    packet->arp_header.SourceProtocolAddress[2] = target->Target_IP[2];
-    packet->arp_header.SourceProtocolAddress[3] = target->Target_IP[3];
-   */
-	memcpy(packet->arp_header.SourceProtocolAddress, target->Target_IP, 4); 
+	  memcpy(packet->ethernet.dest_mac, target->Target_Mac, 6);
+	  memcpy(packet->arp_header.SourceProtocolAddress, target->Target_IP, 4);
   }
-  memcpy(packet->ethernet.src_mac, target->MyMac, 6); 
-  /*
-  packet->ethernet.src_mac[0] = target->MyMac[0];
-  packet->ethernet.src_mac[1] = target->MyMac[1];
-  packet->ethernet.src_mac[2] = target->MyMac[2];
-  packet->ethernet.src_mac[3] = target->MyMac[3];
-  packet->ethernet.src_mac[4] = target->MyMac[4];
-  packet->ethernet.src_mac[5] = target->MyMac[5];
-  */
+  memcpy(packet->ethernet.src_mac, target->MyMac, 6);
   //set arp protocol
   packet->ethernet.Protocol = htons(0x806);
   //arp header -> setting
@@ -71,33 +35,11 @@ void make_arp_packet(Packet* packet, Target* target, int arp_mode)
   packet->arp_header.ProtocolAddressLength = 0x4;
   packet->arp_header.Operation =htons(0x1);
   //set source mac
-  /*
-  packet->arp_header.SourceHardWareAddress[0] = target->MyMac[0];
-  packet->arp_header.SourceHardWareAddress[1] = target->MyMac[1];
-  packet->arp_header.SourceHardWareAddress[2] = target->MyMac[2];
-  packet->arp_header.SourceHardWareAddress[3] = target->MyMac[3];
-  packet->arp_header.SourceHardWareAddress[4] = target->MyMac[4];
-  packet->arp_header.SourceHardWareAddress[5] = target->MyMac[5];
-  */
-  memcpy(packet->arp_header.SourceHardWareAddress, target->MyMac, 6); 
+  memcpy(packet->arp_header.SourceHardWareAddress, target->MyMac, 6);
   //set target Mac
-  /*
-  packet->arp_header.TargetHardWareAddress[0] = target->Target_Mac[0];
-  packet->arp_header.TargetHardWareAddress[1] = target->Target_Mac[1];
-  packet->arp_header.TargetHardWareAddress[2] = target->Target_Mac[2];
-  packet->arp_header.TargetHardWareAddress[3] = target->Target_Mac[3];
-  packet->arp_header.TargetHardWareAddress[4] = target->Target_Mac[4];
-  packet->arp_header.TargetHardWareAddress[5] = target->Target_Mac[5];
-  */
-  memcpy(packet->arp_header.TargetHardWareAddress, target->Target_Mac, 6); 
+  memcpy(packet->arp_header.TargetHardWareAddress, target->Target_Mac, 6);
   //set Target IP hardcoding
-  /*
-  packet->arp_header.TargetProtocolAddress[0] = target->Sender_IP[0];
-  packet->arp_header.TargetProtocolAddress[1] = target->Sender_IP[1];
-  packet->arp_header.TargetProtocolAddress[2] = target->Sender_IP[2];
-  packet->arp_header.TargetProtocolAddress[3] = target->Sender_IP[3];
-*/
-  memcpy(packet->arp_header.TargetProtocolAddress, target->Sender_IP, 6); 
+  memcpy(packet->arp_header.TargetProtocolAddress, target->Sender_IP, 6);
 }
 
 int send_arp_packet(Packet* packet, Target* target, int test_mode)
