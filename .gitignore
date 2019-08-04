@@ -4,3 +4,5 @@
 *.S
 *.out
 arp_sender
+.gitignore
+.gdb_history
