@@ -90,13 +90,7 @@ int send_arp_packet(Packet* packet, Target* target, int test_mode)
     error_handling("Error pcap open live", true);
   }
   int result=0;
-  if(test_mode == REQUEST)
-  {
-    result = pcap_inject(handle,packet, packet_size);
-  }
-  else{
-    result = pcap_inject(handle, packet, packet_size);
-  }
+  result = pcap_inject(handle,packet, packet_size);
 }
 int receive_arp_packet(Packet* packet, Target* target)
 {
