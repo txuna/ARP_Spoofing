@@ -1,7 +1,7 @@
 all : arp_sender
 
 arp_sender: get_my_ip.o Handler.o get_mac.o print_information.o help.o transelate_IP_to_dec.o main.o error_handling.o
-	g++ -o arp_sender Handler.o get_mac.o print_information.o help.o transelate_IP_to_dec.o main.o error_handling.o get_my_ip.o -lpcap
+	g++ -o arp_sender Handler.o get_mac.o print_information.o help.o transelate_IP_to_dec.o main.o error_handling.o get_my_ip.o -lpcap -g -no-pie
 
 Handler.o: pcap_header.h Handler.cpp
 	g++ -c -o Handler.o Handler.cpp
