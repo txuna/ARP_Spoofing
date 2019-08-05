@@ -2,7 +2,7 @@
 
 int get_mac(Target* target)
 {
-  int fd;
+	int fd;
 	struct ifreq ifr;
 	const char *iface = target->wlan_name;
 	unsigned char *mac;
@@ -15,9 +15,9 @@ int get_mac(Target* target)
 	ioctl(fd, SIOCGIFHWADDR, &ifr);
 	close(fd);
 	mac = (unsigned char *)ifr.ifr_hwaddr.sa_data;
-  for(int i=0;i<6;i++)\
-  {
-    target->MyMac[i] = mac[i];
-  }
+	for(int i=0;i<6;i++)\
+	{
+		target->MyMac[i] = mac[i];
+	}
 
 }
